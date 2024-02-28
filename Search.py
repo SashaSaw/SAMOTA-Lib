@@ -1,10 +1,10 @@
 
 class Search:
 
-    def __init__(self, database, objectives, maxIteration):
+    def __init__(self, database, objectives, max_iteration):
         self.database = database
         self.objectives = objectives
-        self.maxIteration = maxIteration
+        self.max_iteration = max_iteration
 
     def genOffspring(self):
 

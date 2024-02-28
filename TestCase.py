@@ -2,9 +2,9 @@ from abc import ABC, abstractmethod
 
 class TestCase(ABC):
 
-    def __init__(self, representation, fitnessScore):
+    def __init__(self, representation, fitness_score):
         self.representation = representation
-        self.fitnessScore = fitnessScore
+        self.fitness_score = fitness_score
 
     @abstractmethod
     def getTestCase(self):
