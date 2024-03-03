@@ -5,11 +5,9 @@ class FitnessCalculator:
     def __init__(self, simulator_name):
         self.simulator_name = simulator_name
 
-    def calculateFitnessSim(self, test_cases) -> TestCase:
-        """
-        Takes the input testCases and computes the fitness scores by running the simulator.
-        Then updates the fitness scores of the testCases.
-        Returns the updated testCases
-        :param testCases:
-        :return set of TestCase:
+    def calculateFitnessSim(self, test_cases) -> set[TestCase]:
+        """Takes the input test cases and computes the fitness scores by running the simulator.
+        Then updates the fitness scores of the test cases and returns the updated test cases
+        :param test_cases:
+        :return: set of TestCases with updated fitness scores
         """

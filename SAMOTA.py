@@ -17,7 +17,18 @@ class SAMOTA:
         self.min_per_cluster = min_per_cluster
         self.database = database
 
-    def updateArchive(self, archive, test_cases, error_threshold, objectives) -> TestCase:
+    def updateArchive(self, archive, test_cases, error_thresholds, objectives) -> (set[TestCase],int):
+        """given a set of test cases that satisfy some objectives(archive), a set of test cases generated randomly that
+        have been run on the simulator, set of error thresholds and set of objectives, this function updates the archive
+        to include test cases from the input archive and the input set of test cases and calculates uncovered objectives
+        by excluding objectives that are still not covered (achieved) by the input test cases with respect to the given
+        error thresholds.
+        :param archive:
+        :param test_cases:
+        :param error_thresholds:
+        :param objectives:
+        :return: updated set of uncovered objectives and updated archive
+        """
 
     def samota(self, num_of_runs):
         global_search = GlobalSearch(self.population_size, self.error_threshold)
