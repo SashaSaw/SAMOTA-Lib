@@ -34,8 +34,7 @@ class SAMOTA:
         global_search = GlobalSearch(self.population_size, self.error_threshold)
         local_search = LocalSearch(self.percentage_local, self.min_per_cluster)
         fitness_calculator = FitnessCalculator("Simulator")
-        archive = [] #TODO
-        uncovered_objectives = 3 #TODO
+        archive = []
         test_cases = global_search.initialPopulation()
         test_cases = fitness_calculator(test_cases)
         archive, uncovered_objectives = self.updateArchive(archive, test_cases, self.error_threshold, self.objectives)

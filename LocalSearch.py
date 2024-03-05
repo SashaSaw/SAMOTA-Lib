@@ -1,9 +1,11 @@
 from Search import Search
+from SurrogateModel import SurrogateModel
 from TestCase import TestCase
 
 class LocalSearch(Search):
 
-    def __init__(self, percentage_local, min_per_cluster):
+    def __init__(self, database, objectives, max_iteration, percentage_local, min_per_cluster):
+        super().__init__(database, objectives, max_iteration)
         self.percentage_local = percentage_local
         self.min_per_cluster = min_per_cluster
 
@@ -17,17 +19,22 @@ class LocalSearch(Search):
         :param min_per_cluster:
         :return: a set of clusters
         """
-        return
 
 
-    def trainLocal(self, test_cases) -> "TODO":
+    def trainLocal(self, test_cases) -> SurrogateModel:
         """trains a surrogate model for the given cluster (set of test cases) and returns it
         :param test_cases:
         :return: a surrogate model
         """
-        return
 
-    def calcFitnessLS(self):
+    def calcFitnessLS(self, test_cases, local_surrogate) -> set[TestCase]:
+        """this function calculates the (predicted) fitness scores of the given test cases using the give surrogate
+        model
+        :param test_cases:
+        :param local_surrogate:
+        :return:
+        """
+
 
 
     def updateBestPredicted(self, best_predicted_testcase, test_cases) -> TestCase:

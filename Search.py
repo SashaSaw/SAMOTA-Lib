@@ -15,7 +15,8 @@ class Search:
         """
 
     def generateNextGen(self, test_cases, uncovered_objectives) -> set[TestCase]:
-        """generates the next generation of test cases from the input test cases for the objectives?
+        """Implements tournament selection in order to select the next generation of test cases in the genetic algorithm
+        note: the function aims to reduce the population size (num of test cases in next gen) to |U|
         :param test_cases:
         :param uncovered_objectives:
         :return: the next generation of test cases

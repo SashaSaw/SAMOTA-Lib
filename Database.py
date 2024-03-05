@@ -1,5 +1,6 @@
 from TestCase import TestCase
 
+
 class Database:
 
     def __init__(self, database):
@@ -9,6 +10,7 @@ class Database:
         """returns the database
         :return: database
         """
+        return self.database
 
     def updateDatabase(self, database, test_cases) -> set[TestCase]:
         """updates the database to include the given test cases
