@@ -20,7 +20,7 @@ class SimulationDataCollector:
         self.params: SimulationParams = params
         self.name = simulation_name
         self.states: SimulationDataRecords = []
-        self.simulation_data: SimulationData = SimulationData(simulation_name)
+        self: SimulationData = SimulationData(simulation_name)
         self.simulation_data.set(self.params, self.road, self.states)
         self.simulation_data.clean()
 

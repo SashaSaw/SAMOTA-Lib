@@ -3,6 +3,7 @@ import json
 import os
 import shutil
 import uuid
+import logging as log
 from collections import namedtuple
 from time import sleep
 from typing import List, Union
@@ -149,6 +150,7 @@ class SimulationData:
         try:
             import platform
             self.info.computer_name = platform.node()
+            log.info(self.info.computer_name + " is running the simulation")
         except Exception as ex:
             self.info.computer_name = str(ex)
 

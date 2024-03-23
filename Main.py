@@ -17,6 +17,7 @@ OUTPUT_RESULTS_TO = 'results'
 DEFAULT = object()
 
 def get_script_path():
+    # Returns the absolute path of the directory containing this script
     return os.path.dirname(os.path.realpath(sys.argv[0]))
 
 
@@ -91,7 +92,7 @@ def setup_logging(log_to, debug):
     log.info(start_msg)
 
 @click.command()
-@click.option('--executor', type=click.Choice(['mock', 'beamng', 'dave2'], case_sensitive=False), default="mock",
+@click.option('--executor', type=click.Choice(['mock', 'beamng'], case_sensitive=False), default="mock",
               show_default='Mock Executor (meant for debugging)',
               help="The name of the executor to use. Currently we have 'mock', 'beamng' or 'dave2'.")
 @click.option('--dave2-model', required=False, type=click.Path(exists=True),
