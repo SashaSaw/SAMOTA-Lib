@@ -1,6 +1,4 @@
 from abc import ABC, abstractmethod
-
-
 class TestCase(ABC):
 
     def __init__(self, representation, fitness_scores_sim, fitness_scores_predicted, uncertainties):

@@ -14,9 +14,10 @@ class RandomTestGenerator():
         will likely self-intersect.
     """
 
-    def __init__(self, executor=None, map_size=None):
+    def __init__(self, executor=None, map_size=None, test_case=None):
         self.executor = executor
         self.map_size = map_size
+        self.test_case = test_case
 
     def start(self):
 
