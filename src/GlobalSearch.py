@@ -14,14 +14,17 @@ class GlobalSearch(Search):
         :param population_size:
         :return: set of random test cases
         """
+        #random is fine (can increase diversity through guided random but improvement is not significant)
 
-    def trainGlobals(self, database, uncovered_objectives) -> SurrogateModel:
+    def trainGlobals(self, database, uncovered_objectives, surrogateModel):
         """trains a set of global surrogate models using all the test cases in D with the number of surrogate machines
         being equal to the number of uncovered objectives (one per uncovered objective)
         :param database:
         :param uncovered_objectives:
         :return: set of Global surrogates
         """
+        #one objective
+
 
     def calcFitnessGS(self, test_cases, surrogates) -> set[TestCase]:
         """given a set of test cases this function calculates the predicted fitness scores and uncertainty of

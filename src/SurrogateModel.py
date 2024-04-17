@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 
-
 class SurrogateModel(ABC):
 
     def __init__(self, x, y):

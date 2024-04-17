@@ -3,11 +3,11 @@ from abc import ABC, abstractmethod
 
 class TestCase(ABC):
 
-    def __init__(self, representation=[(), (), ()], fitness_score_sim=-1, fitness_score_predicted=-1, uncertainty=-1):
+    def __init__(self, representation, fitness_scores_sim, fitness_scores_predicted, uncertainties):
         self.representation = representation
-        self.fitness_score_sim = fitness_score_sim
-        self.fitness_score_predicted = fitness_score_predicted
-        self.uncertainty = uncertainty
+        self.fitness_score_sim = fitness_scores_sim
+        self.fitness_score_predicted = fitness_scores_predicted
+        self.uncertainty = uncertainties
 
     def get_representation(self):
         return self.representation

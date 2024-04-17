@@ -1,12 +1,8 @@
 
 from time import sleep
 import logging as log
-
 from random import randint
-
 from evaluation.cps_tool_competition.code_pipeline.tests_generation import RoadTestFactory
-
-
 
 OUTPUT_RESULTS_TO = 'results'
 DEFAULT = object()

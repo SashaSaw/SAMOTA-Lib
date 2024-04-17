@@ -21,7 +21,9 @@ class LocalSearch(Search):
         :param min_per_cluster:
         :return: a set of clusters
         """
-
+        #take database - for each objective select the top (percentage_local- user provided) test cases highest fitness scores for that objective
+        # do clustering sklearn.cluster.hdbscan - in python library (look at SAMOTA package) takes in min number per cluster
+        # hsbdscan needs to take database of test cases as [[x1,x2,x3,...,x6],...] and the function for calc distnace between test cases needs to be defined (or just use euclidean and see
 
     def trainLocal(self, test_cases) -> SurrogateModel:
         """trains a surrogate model for the given cluster (set of test cases) and returns it

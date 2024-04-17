@@ -53,4 +53,5 @@ class SAMOTA:
             local_test_cases = fitness_calculator.calculateFitnessSim(local_test_cases)
             archive, uncovered_objectives = self.updateArchive(archive, local_test_cases, self.error_threshold, self.objectives)
             database = self.database.updateDatabase(database, local_test_cases)
+            num_of_runs = num_of_runs - 1
         return archive, database
