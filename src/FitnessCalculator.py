@@ -51,6 +51,7 @@ def runSim(testcases):
     map_size = 200
     oob_tolerance = 0.95
     speed_limit = 60
+    output = 1
     # Setup logging
     setup_logging(log_to, debug)
 
@@ -119,8 +120,6 @@ class OneTestGenerator():
         self.test_case = test_case
 
     def start(self):
-        print ("Starting test generation")
-        print ("self.test_case")
         road_points = self.test_case
 
         log.info("Generated test using: %s", road_points)
@@ -156,8 +155,11 @@ class FitnessCalculator:
         :param test_cases:
         :return: set of TestCases with updated fitness scores
         """
-        #for test_case in test_cases
-        print(runSim(test_cases))
-        #use one test generator and fitness score = max(oob_percentage)
-
-
+        output_test_cases = []
+        for test_case in test_cases:
+            representation = test_case.get_representation()
+            max_oob = runSim(representation)
+            fitness_score = 1-max_oob
+            test_case.set_fitness_score_sim([fitness_score])
+            output_test_cases.append(test_case)
+        return output_test_cases

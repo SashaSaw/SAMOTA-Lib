@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-class TestCase(ABC):
+class TestCase():
 
-    def __init__(self, representation, fitness_scores_sim, fitness_scores_predicted, uncertainties):
+    def __init__(self, representation=[], fitness_scores_sim=[], fitness_scores_predicted=[], uncertainties=[]):
         self.representation = representation
         self.fitness_score_sim = fitness_scores_sim
         self.fitness_score_predicted = fitness_scores_predicted
