@@ -1,4 +1,5 @@
 from evaluation.cps_tool_competition.code_pipeline.tests_generation import RoadTestFactory
+from abc import ABC, abstractmethod
 import importlib
 import traceback
 import time
@@ -6,6 +7,19 @@ import os
 import sys
 import errno
 import logging as log
+
+class AbstractFitnessCalculator(ABC):
+
+    def __init__(self, simulator_name):
+        self.simulator_name = simulator_name
+
+    @abstractmethod
+    def calculateFitnessSim(self, test_cases):
+        """Takes the input test cases and computes the fitness scores by running the simulator.
+        Then updates the fitness scores of the test cases and returns the updated test cases
+        :param test_cases:
+        :return: set of TestCases with updated fitness scores
+        """
 
 
 OUTPUT_RESULTS_TO = 'results'
@@ -44,7 +58,7 @@ def runSim(testcases):
     beamng_user = 'C:\\cps-tool-competition\\bng-usr'
     log_to = None  # Default to None, implies logging to console if not specified
     debug = False
-    module_name = 'src.FitnessCalculator'
+    module_name = 'src.fitness_calculator'
     class_name = 'OneTestGenerator'
     executor = 'beamng'
     time_budget = 100
@@ -144,10 +158,7 @@ class OneTestGenerator():
         #time.sleep(10)
         return output
 
-class FitnessCalculator:
-
-    def __init__(self, simulator_name):
-        self.simulator_name = simulator_name
+class BeamngFitnessCalc(AbstractFitnessCalculator):
 
     def calculateFitnessSim(self, test_cases):
         """Takes the input test cases and computes the fitness scores by running the simulator.

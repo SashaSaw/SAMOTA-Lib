@@ -1,4 +1,4 @@
-from TestCase import TestCase
+from test_case import TestCase
 from typing import Set
 
 class Database:
@@ -6,7 +6,7 @@ class Database:
     def __init__(self, database=[]):
         self.database = database
 
-    def setDefaultDatabase(self):
+    def set_default_database(self):
         test_case1 = TestCase([(0, 3), (100, 100), (150, 180)])
         test_case2 = TestCase([(0, 3), (100, 100), (150, 180)])
         test_case3 = TestCase([(0, 3), (100, 100), (150, 180)])
@@ -16,15 +16,15 @@ class Database:
         testcases.append(test_case2)
         testcases.append(test_case3)
         testcases.append(test_case4)
-        self.updateDatabase(testcases)
+        self.update_database(testcases)
 
-    def getDatabase(self) -> Set[TestCase]:
+    def get_database(self):
         """returns the database
         :return: database
         """
         return self.database
 
-    def updateDatabase(self, testcases):
+    def update_database(self, testcases):
         """updates the database to include the given test cases
         :param database:
         :param test_cases:
@@ -33,7 +33,7 @@ class Database:
         for testcase in testcases:
             self.database.append(testcase)
 
-    def loadDatabase(self,filename):
+    def load_database(self, filename):
         """reads a text file that stores a representation of the database and sets the database in the Database object
         to that stored database
         :return: nothing
@@ -63,7 +63,7 @@ class Database:
                 testcase = TestCase(representation, fitness_sim, fitness_predicted, uncertainty)
                 self.database.append(testcase)
 
-    def exportDatabase(self, filename):
+    def export_database(self, filename):
         """formats the database and saves a textfile with the formatted database
         :return: nothing
         """
