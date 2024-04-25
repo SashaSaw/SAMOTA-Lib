@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+import numpy as np
+
 class TestCase():
 
     def __init__(self, representation=[], fitness_scores_sim=[], fitness_scores_predicted=[], uncertainties=[]):
@@ -9,6 +11,12 @@ class TestCase():
 
     def get_representation(self):
         return self.representation
+
+    def flatten_representation(self):
+        representation = self.get_representation()
+        arr = np.array(representation)
+        flat_arr = arr.reshape(-1)
+        return flat_arr
 
     def get_fitness_score_sim(self):
         return self.fitness_score_sim

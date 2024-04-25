@@ -14,7 +14,7 @@ class AbstractFitnessCalculator(ABC):
         self.simulator_name = simulator_name
 
     @abstractmethod
-    def calculateFitnessSim(self, test_cases):
+    def calculate_fitness_sim(self, test_cases):
         """Takes the input test cases and computes the fitness scores by running the simulator.
         Then updates the fitness scores of the test cases and returns the updated test cases
         :param test_cases:
@@ -65,7 +65,7 @@ def runSim(testcases):
     map_size = 200
     oob_tolerance = 0.95
     speed_limit = 60
-    output = 1
+    output = 0
     # Setup logging
     setup_logging(log_to, debug)
 
@@ -143,7 +143,7 @@ class OneTestGenerator():
         # Send the test for execution
         test_outcome, description, execution_data = self.executor.execute_test(the_test)
 
-        output = 1
+        output = 0
         if test_outcome != "INVALID":
         # Plot the OOB_Percentage: How much the car is outside the road?
             oob_percentage = [state.oob_percentage for state in execution_data]
@@ -154,13 +154,11 @@ class OneTestGenerator():
         log.info("test_outcome %s", test_outcome)
         log.info("description %s", description)
 
-        #import time
-        #time.sleep(10)
         return output
 
 class BeamngFitnessCalc(AbstractFitnessCalculator):
 
-    def calculateFitnessSim(self, test_cases):
+    def calculate_fitness_sim(self, test_cases):
         """Takes the input test cases and computes the fitness scores by running the simulator.
         Then updates the fitness scores of the test cases and returns the updated test cases
         :param test_cases:
@@ -169,8 +167,8 @@ class BeamngFitnessCalc(AbstractFitnessCalculator):
         output_test_cases = []
         for test_case in test_cases:
             representation = test_case.get_representation()
-            max_oob = runSim(representation)
-            fitness_score = 1-max_oob
+            fitness_score = runSim(representation)
+            # need to make invalid test cases output null fitness score
             test_case.set_fitness_score_sim([fitness_score])
             output_test_cases.append(test_case)
         return output_test_cases

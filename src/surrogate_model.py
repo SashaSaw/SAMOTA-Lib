@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-import numpy as np
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import make_pipeline
@@ -8,7 +7,6 @@ from sklearn.metrics import mean_squared_error
 
 
 class AbstractSurrogateModel(ABC):
-
 
     @abstractmethod
     def train(self, test_cases):
@@ -26,17 +24,12 @@ class polynomial_regression(AbstractSurrogateModel):
         self.X_test = []
         self.y_test = []
 
-    def reformat_represent(self, testcase):
-        representation = testcase.get_representation()
-        arr = np.array(representation)
-        flat_arr = arr.reshape(-1)
-        return flat_arr
-
     def train(self, test_cases):
+        print("training PR model")
         x = []
         y = []
         for test_case in test_cases:
-            sample = self.reformat_represent(test_case)
+            sample = test_case.flatten_representation()
             x.append(sample)
             fitness_score_sim = test_case.get_fitness_score_sim()[0]
             y.append(fitness_score_sim)
@@ -48,8 +41,12 @@ class polynomial_regression(AbstractSurrogateModel):
 
     def test(self):
         predict = self.model.predict(self.X_test)
+        print (predict)
         mse = mean_squared_error(self.y_test, predict)
         print(f'Mean Squared Error: {mse}')
+        return mse
+
     def predict(self, testcase):
-        prediction = self.model.predict([testcase])
+        print("predicting using PR model")
+        prediction = self.model.predict(self.X_test)
         return prediction[0]

@@ -1,7 +1,7 @@
 from typing import List
 
 from search import Search
-from surrogate_model import SurrogateModel
+from src.surrogate_model import SurrogateModel
 from test_case import TestCase
 
 class LocalSearch(Search):
