@@ -9,6 +9,9 @@ class TestCase():
         self.fitness_score_predicted = fitness_scores_predicted
         self.uncertainty = uncertainties
 
+    def __str__(self):
+        return f"rep: {self.representation}, fit_sim: {self.fitness_score_sim}, fit_pred: {self.fitness_score_predicted}, uncert: {self.uncertainty}"
+
     def get_representation(self):
         return self.representation
 

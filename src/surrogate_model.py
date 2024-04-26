@@ -25,7 +25,7 @@ class polynomial_regression(AbstractSurrogateModel):
         self.y_test = []
 
     def train(self, test_cases):
-        print("training PR model")
+        #print("training PR model")
         x = []
         y = []
         for test_case in test_cases:
@@ -47,6 +47,7 @@ class polynomial_regression(AbstractSurrogateModel):
         return mse
 
     def predict(self, testcase):
-        print("predicting using PR model")
-        prediction = self.model.predict(self.X_test)
+        #print("predicting using PR model")
+        prediction = self.model.predict([testcase])
+        #print(prediction[0])
         return prediction[0]

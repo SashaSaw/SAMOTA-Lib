@@ -36,10 +36,10 @@ class GlobalSearch(Search):
         for i in range (len(uncovered_objectives)):
             test_cases_singleobj = []
             for test_case in test_cases:
-                temp_test_case = TestCase(test_case.get_representation,
-                                          test_case.get_fitness_score_sim[i],
-                                          test_case.get_fitness_score_predicted,
-                                          test_case.get_uncertainty)
+                temp_test_case = TestCase(test_case.get_representation(),
+                                          [test_case.get_fitness_score_sim()[i]],
+                                          test_case.get_fitness_score_predicted(),
+                                          test_case.get_uncertainty())
                 test_cases_singleobj.append(temp_test_case)
             # append each set of test cases with only the fitness score for a specific objective
             test_cases_per_objective.append(test_cases_singleobj)
@@ -47,7 +47,8 @@ class GlobalSearch(Search):
         surrogate_models = []
         # for each set of test cases that satisfy an uncovered objective train a surrogate model
         for test_cases_singleobj in test_cases_per_objective:
-            temp_surrogate = surrogate_model.train(test_cases_singleobj)
+            temp_surrogate = surrogate_model
+            temp_surrogate.train(test_cases_singleobj)
             surrogate_models.append(temp_surrogate)
         return surrogate_models
 
@@ -63,7 +64,7 @@ class GlobalSearch(Search):
         for test_case in test_cases:
             fit_scores_predicted = []
             for surrogate in surrogates:
-                fit_score_predicted = surrogate.predict(test_case)
+                fit_score_predicted = surrogate.predict(test_case.flatten_representation())
                 fit_scores_predicted.append(fit_score_predicted)
             test_case.set_fitness_score_predicted(fit_scores_predicted)
             output.append(test_case)
@@ -73,7 +74,7 @@ class GlobalSearch(Search):
 
 
 
-    def update(self, best_tcs, most_uncertain_tc, updated_tcs, uncovered_objectives, error_thresholds):
+    def update(self, test_cases, uncovered_objectives, error_thresholds):
         """updates best_tc so that it includes the best test case from the given set of test cases for each objective in
         uncovered_objectives, updates most_uncertain_tc so that it includes the most uncertain test case from the given
         set of test cases for each objective in uncovered_objectives and updates uncovered_objectives such that it
@@ -86,9 +87,8 @@ class GlobalSearch(Search):
         :param error_thresholds:
         :return: updated set of best test cases, set of most uncertain test cases, and uncovered objectives
         """
-        test_cases = best_tcs + updated_tcs
         updated_uncovered_objectives = [False] * len(uncovered_objectives)
-        updated_best_tcs = []
+        updated_best_tcs = [None] * len(uncovered_objectives)
         # for each objective
         for i in range (len(uncovered_objectives)):
             # if objective is already satisfied replace best test case for objective if a better objective is found
@@ -96,19 +96,22 @@ class GlobalSearch(Search):
                 updated_uncovered_objectives[i] = True
                 highest_fitness = 0
                 for test_case in test_cases:
-                    if test_case.get_fitness_score_predicted()[i] > highest_fitness:
-                        highest_fitness = test_case.get_fitness_score_predicted()[i]
+                    fitness_predicted = test_case.get_fitness_score_predicted()[i]
+                    if fitness_predicted > highest_fitness:
+                        highest_fitness = fitness_predicted
                         updated_best_tcs[i] = test_case
             # if objective not satisfied yet then find best test case for objective
-            # if best test case fitness score is larger than 0 then set uncovered objective to satisfied
+            # if best test case fitness score is larger than threshold then set uncovered objective to satisfied
             elif not uncovered_objectives[i]:
                 highest_fitness = -1
                 for test_case in test_cases:
-                    if test_case.get_fitness_score_predicted()[i] > highest_fitness:
-                        highest_fitness = test_case.get_fitness_score_predicted()[i]
+                    fitness_predicted = test_case.get_fitness_score_predicted()[i]
+                    if fitness_predicted > highest_fitness:
+                        highest_fitness = fitness_predicted
                         updated_best_tcs[i] = test_case
-                if highest_fitness > 0:
+                if highest_fitness > error_thresholds[i]:
                     updated_uncovered_objectives[i] = True
+
         return updated_best_tcs, updated_uncovered_objectives
 
 
@@ -116,17 +119,17 @@ class GlobalSearch(Search):
         #instead of acc calculating most_uncertain just return a random candidate for now
 
     def global_search(self, database, uncovered_obj, pop_size, max_iteration, error_thresholds):
+        print("starting global search")
         surrogate_model = polynomial_regression(3)
         global_surrogates = self.train_globals(database, uncovered_obj, surrogate_model)
         best_tcs = []
-        most_uncertain_tcs = []
         counter = 0
         test_cases = self.initial_population(pop_size)
         while counter < max_iteration:
             offspring = self.gen_offspring(test_cases)
             updated_tcs = self.calc_fitness_gs(test_cases + offspring, global_surrogates)
-            best_tc, uncovered_obj = self.update(best_tcs, most_uncertain_tcs, updated_tcs,
-                                                                uncovered_obj, error_thresholds)
+            best_tcs, uncovered_obj = self.update(best_tcs + updated_tcs, uncovered_obj, error_thresholds)
             test_cases = self.generate_next_gen(updated_tcs, uncovered_obj)
             counter = counter + 1
-        return best_tc #+ most_uncertain_tc
+        print("global search concluded")
+        return best_tcs #+ most_uncertain_tc

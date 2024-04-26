@@ -14,16 +14,18 @@ class SAMOTA:
         :param uncovered_obj:
         :return: updated set of uncovered objectives and updated archive
         """
-        output_archive = []
+        output_archive = [None] * len(uncovered_obj)
         all_test_cases = archive + test_cases
         for i in range(len(uncovered_obj)):
             highest_fitness = 0
             uncovered_obj[i] = False
             for test_case in all_test_cases:
-                if test_case.get_fitness_score_sim()[i] > error_thresholds[i] and test_case.get_fitness_score_sim() > highest_fitness:
-                    uncovered_obj[i] = True
-                    highest_fitness = test_case.get_fitness_score_sim
-                    output_archive[i] = test_case
+                if test_case is not None:
+                    fitness = test_case.get_fitness_score_sim()[i]
+                    if fitness > error_thresholds[i] and fitness > highest_fitness:
+                        uncovered_obj[i] = True
+                        highest_fitness = fitness
+                        output_archive[i] = test_case
         return output_archive, uncovered_obj
 
     def init_uncovered_obj(self, num_of_obj):
@@ -35,12 +37,12 @@ class SAMOTA:
         test_cases = global_search.initial_population(pop_size)
         test_cases = fitness_calc.calculate_fitness_sim(test_cases)
         archive, uncovered_objectives = self.update_archive(archive, test_cases, error_thresholds, uncovered_obj)
-        database = database.update_database(test_cases)
+        database.update_database(test_cases)
         while(num_of_runs != 0):
             global_test_cases = global_search.global_search(database, uncovered_objectives, pop_size, gmax, error_thresholds)
             global_test_cases = fitness_calc.calculate_fitness_sim(global_test_cases)
             archive, uncovered_objectives = self.update_archive(archive, global_test_cases, error_thresholds, uncovered_obj)
-            database = database.update_database(database, global_test_cases)
+            database.update_database(global_test_cases)
             #local_test_cases = local_search.local_search()
             #local_test_cases = fitness_calculator.calculateFitnessSim(local_test_cases)
             #archive, uncovered_objectives = self.update_archive(archive, local_test_cases, self.error_threshold, self.objectives)

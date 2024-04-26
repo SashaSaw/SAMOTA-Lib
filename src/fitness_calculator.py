@@ -53,7 +53,7 @@ def setup_logging(log_to, debug):
     sys.excepthook = log_exception
 
     log.info(start_msg)
-def runSim(testcases):
+def runSim(representation):
     beamng_home = 'C:\\Program Files\\BeamNG.tech.v0.26.2.0'
     beamng_user = 'C:\\cps-tool-competition\\bng-usr'
     log_to = None  # Default to None, implies logging to console if not specified
@@ -86,12 +86,12 @@ def runSim(testcases):
     result_folder = os.path.join(default_output_folder,
                                  "_".join([str(module_name), str(class_name), str(timestamp_id)]))
 
-    try:
-        os.makedirs(result_folder)
-    except OSError:
-        log.fatal("An error occurred during test generation")
-        traceback.print_exc()
-        sys.exit(2)
+    #try:
+    #    os.makedirs(result_folder)
+    #except OSError:
+    #    log.fatal("An error occurred during test generation")
+    #    traceback.print_exc()
+    #    sys.exit(2)
 
     log.info("Outputting results to " + result_folder)
 
@@ -111,7 +111,7 @@ def runSim(testcases):
 
     try:
         # Instantiate the test generator
-        test_generator = the_class(executor=the_executor, map_size=map_size, test_case=testcases)
+        test_generator = the_class(executor=the_executor, map_size=map_size, test_case=representation)
         # Start the generation
         output = test_generator.start()
     except Exception:

@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 from src.samota import SAMOTA
 from src.fitness_calculator import BeamngFitnessCalc
 from src.global_search import GlobalSearch
-from src.database import Database
+from src.database import DatabaseManager
 from src.test_case import TestCase
 #from src import Database
 from src.surrogate_model import polynomial_regression
@@ -11,10 +11,11 @@ if __name__ == '__main__':
     samota = SAMOTA()
     fit = BeamngFitnessCalc("beamng")
     gs = GlobalSearch(200)
-    db = Database()
-    archive, database = samota.samota(2, 1, [0.1], fit, gs, 2, db)
+    db = DatabaseManager()
+    archive, database = samota.samota(2, 5, [0.1], fit, gs, 2, db)
     database.export_database("database")
-    print(archive)
+    for tc in archive:
+        print(tc.__str__())
     #testcase1 = TestCase([[20, 20], [20, 50], [23, 100]], [], [], [])
     #testcase2 = TestCase([[20, 20], [20, 80], [100, 100]], [], [], [])
     #testcase3 = TestCase([[20, 20], [20, 80], [20, 100]], [], [], [])

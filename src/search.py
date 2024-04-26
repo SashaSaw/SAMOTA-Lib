@@ -23,12 +23,12 @@ class Search:
             for element in representation:
                 mutated_representation.append(self.mutate(element, 0, 200, 5, 0.5))
             # mutated representation is turned back into its original form
-            unflattened_rep = np.array(mutated_representation).reshape(-1, 2)
+            unflattened_rep = self.unflatten(mutated_representation)
             # create a test case that represents the mutated version of original test case
             temp_tc = TestCase(unflattened_rep,
-                               test_case.get_fitness_score_sim,
-                               test_case.get_fitness_score_predicted,
-                               test_case.get_uncertainty)
+                               test_case.get_fitness_score_sim(),
+                               test_case.get_fitness_score_predicted(),
+                               test_case.get_uncertainty())
             mutated_test_cases.append(temp_tc)
 
         # initialise the set of test cases that have been crossed over
@@ -94,12 +94,18 @@ class Search:
                 temp = first_representation[i]
                 first_representation[i] = second_representation[i]
                 second_representation[i] = temp
-        output_tc_1 = TestCase(np.array(first_representation).reshape(-1, 2),
+        output_tc_1 = TestCase(self.unflatten(first_representation),
                                first_tc.get_fitness_score_sim(),
                                first_tc.get_fitness_score_predicted(),
                                first_tc.get_uncertainty())
-        output_tc_2 = TestCase(np.array(second_representation).reshape(-1, 2),
+        output_tc_2 = TestCase(self.unflatten(second_representation),
                                second_tc.get_fitness_score_sim(),
                                second_tc.get_fitness_score_predicted(),
                                second_tc.get_uncertainty())
         return output_tc_1, output_tc_2
+
+    def unflatten(self, list):
+        grouped_list = []
+        for i in range(0, len(list), 2):
+            grouped_list.append(list[i:i + 2])
+        return grouped_list

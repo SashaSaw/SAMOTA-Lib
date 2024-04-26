@@ -1,9 +1,9 @@
 from src.test_case import TestCase
 
-class Database:
+class DatabaseManager:
 
-    def __init__(self, database=[]):
-        self.database = database
+    def __init__(self, initial_data=None):
+        self.database = initial_data if initial_data is not None else []
 
     def set_default_database(self):
         test_case1 = TestCase([(0, 3), (100, 100), (150, 180)])
@@ -21,7 +21,7 @@ class Database:
         """returns the database
         :return: database
         """
-        return self.database
+        return self.database.copy()
 
     def update_database(self, test_cases):
         """updates the database to include the given test cases

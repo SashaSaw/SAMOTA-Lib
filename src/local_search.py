@@ -1,7 +1,7 @@
 from typing import List
 
 from search import Search
-from src.surrogate_model import SurrogateModel
+from src.surrogate_model import polynomial_regression
 from test_case import TestCase
 
 class LocalSearch(Search):
@@ -25,7 +25,7 @@ class LocalSearch(Search):
         # do clustering sklearn.cluster.hdbscan - in python library (look at SAMOTA package) takes in min number per cluster
         # hsbdscan needs to take database of test cases as [[x1,x2,x3,...,x6],...] and the function for calc distnace between test cases needs to be defined (or just use euclidean and see
 
-    def train_local(self, test_cases) -> SurrogateModel:
+    def train_local(self, test_cases):
         """trains a surrogate model for the given cluster (set of test cases) and returns it
         :param test_cases:
         :return: a surrogate model
