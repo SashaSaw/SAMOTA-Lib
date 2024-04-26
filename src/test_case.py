@@ -17,9 +17,11 @@ class TestCase():
 
     def flatten_representation(self):
         representation = self.get_representation()
-        arr = np.array(representation)
-        flat_arr = arr.reshape(-1)
-        return flat_arr
+        flat_rep = []
+        for i in range(len(representation)):
+            for j in range(len(representation[i])):
+                flat_rep.append(representation[i][j])
+        return flat_rep
 
     def get_fitness_score_sim(self):
         return self.fitness_score_sim

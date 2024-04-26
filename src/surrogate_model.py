@@ -49,5 +49,4 @@ class polynomial_regression(AbstractSurrogateModel):
     def predict(self, testcase):
         #print("predicting using PR model")
         prediction = self.model.predict([testcase])
-        #print(prediction[0])
         return prediction[0]

@@ -31,21 +31,32 @@ class SAMOTA:
     def init_uncovered_obj(self, num_of_obj):
         return [False] * num_of_obj
 
-    def samota(self, num_of_runs, pop_size, error_thresholds, fitness_calc, global_search, gmax, database):
+    def samota(self, num_of_runs, pop_size, error_thresholds, fit_calc, gs, gmax, ls, lmax, percent_local, min_per_cluster, db):
         archive = []
         uncovered_obj = self.init_uncovered_obj(len(error_thresholds))
-        test_cases = global_search.initial_population(pop_size)
-        test_cases = fitness_calc.calculate_fitness_sim(test_cases)
-        archive, uncovered_objectives = self.update_archive(archive, test_cases, error_thresholds, uncovered_obj)
-        database.update_database(test_cases)
-        while(num_of_runs != 0):
-            global_test_cases = global_search.global_search(database, uncovered_objectives, pop_size, gmax, error_thresholds)
-            global_test_cases = fitness_calc.calculate_fitness_sim(global_test_cases)
-            archive, uncovered_objectives = self.update_archive(archive, global_test_cases, error_thresholds, uncovered_obj)
-            database.update_database(global_test_cases)
-            #local_test_cases = local_search.local_search()
-            #local_test_cases = fitness_calculator.calculateFitnessSim(local_test_cases)
-            #archive, uncovered_objectives = self.update_archive(archive, local_test_cases, self.error_threshold, self.objectives)
-            #database = self.database.update_database(database, local_test_cases)
+        test_cases = gs.initial_population(pop_size)
+        test_cases = fit_calc.calculate_fitness_sim(test_cases)
+        archive, uncovered_objs = self.update_archive(archive, test_cases, error_thresholds, uncovered_obj)
+        db.update_database(test_cases)
+        while(num_of_runs > 0):
+            global_test_cases = gs.global_search(db, uncovered_objs, pop_size, gmax, error_thresholds)
+            global_test_cases = fit_calc.calculate_fitness_sim(global_test_cases)
+            archive, uncovered_objs = self.update_archive(archive, global_test_cases, error_thresholds, uncovered_obj)
+            db.update_database(global_test_cases)
+            local_test_cases = ls.local_search(db, uncovered_objs, lmax, percent_local, min_per_cluster)
+            local_test_cases = fit_calc.calculate_fitness_sim(local_test_cases)
+            archive, uncovered_objs = self.update_archive(archive, local_test_cases, error_thresholds, uncovered_obj)
+            db.update_database(global_test_cases)
+            if self.check_if_obj_covered(uncovered_obj):
+                print("objective covered - stopping algorithm early...")
+                num_of_runs = 0
             num_of_runs = num_of_runs - 1
-        return archive, database
+        return archive, db
+
+    def check_if_obj_covered(self, uncovered_obj):
+        output = True
+        # for all objs if one is False then not all objectives are covered
+        for obj in uncovered_obj:
+            if not obj:
+                output = False
+        return output

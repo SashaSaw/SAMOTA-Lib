@@ -5,14 +5,15 @@ from src.test_case import TestCase
 
 class GlobalSearch(Search):
 
-    def __init__(self, map_size):
-        super().__init__(map_size)
+    def __init__(self, map_size, surrogate):
+        super().__init__(map_size, surrogate)
 
     def initial_population(self, population_size):
         """generates a set of random test cases with an amount equal to population size
         :param population_size:
         :return: set of random test cases
         """
+        print("creating initial population...")
         population = []
         for i in range(population_size):
             road_points = []
@@ -22,7 +23,7 @@ class GlobalSearch(Search):
             population.append(test_case)
         return population
 
-    def train_globals(self, database, uncovered_objectives, surrogate_model):
+    def train_globals(self, database, uncovered_objectives):
         """trains a set of global surrogate models using all the test cases in D with the number of surrogate machines
         being equal to the number of uncovered objectives (one per uncovered objective)
         :param database:
@@ -30,6 +31,7 @@ class GlobalSearch(Search):
         :param surrogate_model:
         :return: set of Global surrogates
         """
+        print("training global surrogate models...")
         test_cases = database.get_database()
         test_cases_per_objective = []
         # for each objective get a set of test cases that satisfy that objective
@@ -47,7 +49,7 @@ class GlobalSearch(Search):
         surrogate_models = []
         # for each set of test cases that satisfy an uncovered objective train a surrogate model
         for test_cases_singleobj in test_cases_per_objective:
-            temp_surrogate = surrogate_model
+            temp_surrogate = self.surrogate
             temp_surrogate.train(test_cases_singleobj)
             surrogate_models.append(temp_surrogate)
         return surrogate_models
@@ -60,6 +62,7 @@ class GlobalSearch(Search):
         :param surrogates:
         :return: set of test cases with updated fitness scores and uncertainty values
         """
+        print("predicting fitness scores...")
         output = []
         for test_case in test_cases:
             fit_scores_predicted = []
@@ -80,17 +83,16 @@ class GlobalSearch(Search):
         set of test cases for each objective in uncovered_objectives and updates uncovered_objectives such that it
         excludes the objectives covered (achieved) by the test cases in the best_tc set.
         then returns the updated best_tc, most_uncertain_tc, and uncovered_objectives.
-        :param best_tc:
-        :param most_uncertain_tc:
-        :param updated_tc:
+        :param test_cases:
         :param uncovered_objectives:
         :param error_thresholds:
         :return: updated set of best test cases, set of most uncertain test cases, and uncovered objectives
         """
+        print("updating best test case and uncovered objectives...")
         updated_uncovered_objectives = [False] * len(uncovered_objectives)
         updated_best_tcs = [None] * len(uncovered_objectives)
         # for each objective
-        for i in range (len(uncovered_objectives)):
+        for i in range(len(uncovered_objectives)):
             # if objective is already satisfied replace best test case for objective if a better objective is found
             if uncovered_objectives[i]:
                 updated_uncovered_objectives[i] = True
@@ -119,9 +121,8 @@ class GlobalSearch(Search):
         #instead of acc calculating most_uncertain just return a random candidate for now
 
     def global_search(self, database, uncovered_obj, pop_size, max_iteration, error_thresholds):
-        print("starting global search")
-        surrogate_model = polynomial_regression(3)
-        global_surrogates = self.train_globals(database, uncovered_obj, surrogate_model)
+        print(" *** starting global search ***")
+        global_surrogates = self.train_globals(database, uncovered_obj)
         best_tcs = []
         counter = 0
         test_cases = self.initial_population(pop_size)
@@ -131,5 +132,5 @@ class GlobalSearch(Search):
             best_tcs, uncovered_obj = self.update(best_tcs + updated_tcs, uncovered_obj, error_thresholds)
             test_cases = self.generate_next_gen(updated_tcs, uncovered_obj)
             counter = counter + 1
-        print("global search concluded")
+        print(" *** global search concluded *** ")
         return best_tcs #+ most_uncertain_tc

@@ -4,8 +4,9 @@ import random
 
 class Search:
 
-    def __init__(self, map_size):
+    def __init__(self, map_size, surrogate):
         self.map_size = map_size
+        self.surrogate = surrogate
 
     def gen_offspring(self, test_cases):
         """Takes a set of test cases and generates offspring (applies algorithm to the testcases)
@@ -13,6 +14,7 @@ class Search:
         :param test_cases:
         :return: offspring test cases
         """
+        print("generating offspring...")
         # initialise the set of mutated test cases
         mutated_test_cases = []
         for test_case in test_cases:
@@ -52,6 +54,7 @@ class Search:
         :param uncovered_objectives:
         :return: the next generation of test cases
         """
+        print("generating next generation...")
         output_test_cases = []
         # count number of uncovered_objectives there are
         num_uncovered_obj = uncovered_objectives.count(False)
