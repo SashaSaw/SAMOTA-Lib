@@ -16,7 +16,7 @@ class AbstractSurrogateModel(ABC):
     def predict(self, test_cases):
         pass
 
-class polynomial_regression(AbstractSurrogateModel):
+class PolynomialRegression(AbstractSurrogateModel):
 
     def __init__(self, degree=2):
         self.degree = degree

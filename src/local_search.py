@@ -2,7 +2,6 @@ from typing import List
 import heapq
 from sklearn.cluster import HDBSCAN
 from src.search import Search
-from src.surrogate_model import polynomial_regression
 from src.test_case import TestCase
 
 class LocalSearch(Search):

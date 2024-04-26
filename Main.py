@@ -6,15 +6,15 @@ from src.local_search import LocalSearch
 from src.database import DatabaseManager
 from src.test_case import TestCase
 #from src import Database
-from src.surrogate_model import polynomial_regression
+from src.surrogate_model import PolynomialRegression
 
 if __name__ == '__main__':
 
 
     samota = SAMOTA()
     fit = BeamngFitnessCalc("beamng")
-    gs = GlobalSearch(200, polynomial_regression(3))
-    ls = LocalSearch(200, polynomial_regression(3))
+    gs = GlobalSearch(200, PolynomialRegression(3))
+    ls = LocalSearch(200, PolynomialRegression(3))
     db = DatabaseManager()
     archive, database = samota.samota(2, 10, [0.1], fit, gs, 2, ls, 2, 0.6, 2, db)
     database.export_database("database")

@@ -1,7 +1,7 @@
 import unittest
 from src.fitness_calculator import BeamngFitnessCalc
 from src.test_case import TestCase
-from src.surrogate_model import polynomial_regression
+from src.surrogate_model import PolynomialRegression
 import random
 
 
@@ -44,7 +44,7 @@ class TestSurrogateModel(unittest.TestCase):
         self.test_cases = self.fit.calculate_fitness_sim(self.test_cases)
 
     def test_surrogate_mse(self):
-        self.surrogate = polynomial_regression(3)
+        self.surrogate = PolynomialRegression(3)
         self.surrogate.train(self.test_cases)
         mse = self.surrogate.test()
         print (mse)

@@ -1,4 +1,3 @@
-import numpy as np
 from src.test_case import TestCase
 import random
 

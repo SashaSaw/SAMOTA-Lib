@@ -86,13 +86,6 @@ def runSim(representation):
     result_folder = os.path.join(default_output_folder,
                                  "_".join([str(module_name), str(class_name), str(timestamp_id)]))
 
-    #try:
-    #    os.makedirs(result_folder)
-    #except OSError:
-    #    log.fatal("An error occurred during test generation")
-    #    traceback.print_exc()
-    #    sys.exit(2)
-
     log.info("Outputting results to " + result_folder)
 
     # Setup executor. All the executor must output the execution data into the result_folder

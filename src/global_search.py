@@ -1,6 +1,5 @@
 from src.search import Search
 from random import randint
-from src.surrogate_model import polynomial_regression
 from src.test_case import TestCase
 
 class GlobalSearch(Search):
