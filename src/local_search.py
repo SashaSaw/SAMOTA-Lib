@@ -118,6 +118,7 @@ class LocalSearch(Search):
                     best_predicted_testcase = self.update_best_predicted(best_predicted_testcase, updated_tcs, i)
                     cluster = self.generate_next_gen(updated_tcs, uncovered_obj)
                     counter = counter + 1
-                test_cases.append(best_predicted_testcase)
+                if best_predicted_testcase is not None:
+                    test_cases.append(best_predicted_testcase)
         print(" *** local search concluded ***")
         return test_cases

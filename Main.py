@@ -18,6 +18,7 @@ if __name__ == '__main__':
     # local search = ls, max iterations for local search = 2, percentage for training surrogate models is 0.6 (60%)
     # minimum number of test cases in cluster = 2
     db = DatabaseManager()
+    db.load_database("database")
     # database = db
     samota = SAMOTA(fit, gs, ls, db)
     # max number of runs = 2, population size = 10, list of error thresholds is [0.1]

@@ -44,6 +44,7 @@ class DatabaseManager:
             # Converts each line of file into a Test Case and then appends it to the database
             for line in lines:
                 attributes = line.split("/")
+                print (attributes)
                 rep = attributes[0]
                 representation = self.read_rep(rep)
 
@@ -59,6 +60,7 @@ class DatabaseManager:
                 testcase = TestCase(representation, fitness_sim, fitness_predicted, uncertainty)
                 self.database.append(testcase)
 
+
     def read_rep(self, rep):
         rep_without_brackets = rep[1:-2]
         substrings = rep_without_brackets.split("], [")
@@ -67,15 +69,18 @@ class DatabaseManager:
             substring = substring.replace('[', '')
             substring = substring.replace(']', '')
             x, y = map(int, substring.split(","))
-            representation.append([x, y])
+            representation.append([int(x), int(y)])
         return representation
 
     def read_values(self, string):
-        string_without_brackets = string[1:-2]
-        substrings = string_without_brackets.split(", ")
+        string = string.replace('[', '')
+        string = string.replace(']', '')
+        string = string.replace(' ', '')
+        substrings = string.split(",")
         value = []
         for substring in substrings:
-            value.append(substring)
+            if len(substring) > 0:
+                value.append(float(substring))
         return value
 
     def export_database(self, filename):
