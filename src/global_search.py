@@ -4,8 +4,11 @@ from src.test_case import TestCase
 
 class GlobalSearch(Search):
 
-    def __init__(self, map_size, surrogate):
-        super().__init__(map_size, surrogate)
+    def __init__(self, surrogate, max_iter, lower_boundaries, upper_boundaries):
+        super().__init__(surrogate, max_iter)
+        self.lower_boundaries = lower_boundaries
+        self.upper_boundaries = upper_boundaries
+
 
     def initial_population(self, population_size):
         """generates a set of random test cases with an amount equal to population size
@@ -16,8 +19,9 @@ class GlobalSearch(Search):
         population = []
         for i in range(population_size):
             road_points = []
-            for i in range(0, 3):
-                road_points.append([randint(0, self.map_size), randint(0, self.map_size)])
+            for index in range(0, 3):
+                road_points.append([randint(self.lower_boundaries[index], self.upper_boundaries[index]),
+                                    randint(self.lower_boundaries[index], self.upper_boundaries[index])])
             test_case = TestCase(road_points, [], [], [])
             population.append(test_case)
         return population
@@ -27,14 +31,13 @@ class GlobalSearch(Search):
         being equal to the number of uncovered objectives (one per uncovered objective)
         :param database:
         :param uncovered_objectives:
-        :param surrogate_model:
         :return: set of Global surrogates
         """
         print("training global surrogate models...")
         test_cases = database.get_database()
         test_cases_per_objective = []
         # for each objective get a set of test cases that satisfy that objective
-        for i in range (len(uncovered_objectives)):
+        for i in range(len(uncovered_objectives)):
             test_cases_singleobj = []
             for test_case in test_cases:
                 temp_test_case = TestCase(test_case.get_representation(),
@@ -71,10 +74,6 @@ class GlobalSearch(Search):
             test_case.set_fitness_score_predicted(fit_scores_predicted)
             output.append(test_case)
         return output
-        #for most_uncertain you can use multiple surrogate models to predict the fitness score and compare their results,
-        #similar results = low uncertainty and different results = high uncertainty
-
-
 
     def update(self, test_cases, uncovered_objectives, error_thresholds):
         """updates best_tc so that it includes the best test case from the given set of test cases for each objective in
@@ -115,21 +114,17 @@ class GlobalSearch(Search):
 
         return updated_best_tcs, updated_uncovered_objectives
 
-
-
-        #instead of acc calculating most_uncertain just return a random candidate for now
-
-    def global_search(self, database, uncovered_obj, pop_size, max_iteration, error_thresholds):
+    def global_search(self, database, uncovered_obj, pop_size, error_thresholds):
         print(" *** starting global search ***")
         global_surrogates = self.train_globals(database, uncovered_obj)
         best_tcs = []
         counter = 0
         test_cases = self.initial_population(pop_size)
-        while counter < max_iteration:
+        while counter < self.max_iter:
             offspring = self.gen_offspring(test_cases)
             updated_tcs = self.calc_fitness_gs(test_cases + offspring, global_surrogates)
             best_tcs, uncovered_obj = self.update(best_tcs + updated_tcs, uncovered_obj, error_thresholds)
             test_cases = self.generate_next_gen(updated_tcs, uncovered_obj)
             counter = counter + 1
         print(" *** global search concluded *** ")
-        return best_tcs #+ most_uncertain_tc
+        return best_tcs

@@ -1,11 +1,12 @@
 from src.test_case import TestCase
 import random
 
+
 class Search:
 
-    def __init__(self, map_size, surrogate):
-        self.map_size = map_size
+    def __init__(self, surrogate, max_iter):
         self.surrogate = surrogate
+        self.max_iter = max_iter
 
     def gen_offspring(self, test_cases):
         """Takes a set of test cases and generates offspring (applies algorithm to the testcases)
@@ -36,9 +37,9 @@ class Search:
         crossed_test_cases = []
         # for each two test cases in the mutated test cases list perform crossover
         for i in range(0, len(mutated_test_cases), 2):
-            if i+1 < len(mutated_test_cases):
+            if i + 1 < len(mutated_test_cases):
                 first_tc = mutated_test_cases[i]
-                second_tc = mutated_test_cases[i+1]
+                second_tc = mutated_test_cases[i + 1]
                 first_tc_crossed, second_tc_crossed = self.uniform_crossover(first_tc, second_tc, 0.7)
                 crossed_test_cases.append(first_tc_crossed)
                 crossed_test_cases.append(second_tc_crossed)
@@ -70,7 +71,7 @@ class Search:
     def tournament_selection(self, population, tournament_size, index):
         best = random.choice(population)
         population.remove(best)
-        for i in range (2, tournament_size):
+        for i in range(2, tournament_size):
             next = random.choice(population)
             population.remove(next)
             if best.get_fitness_predicted()[index] < next.get_fitness_predicted()[index]:
@@ -78,7 +79,7 @@ class Search:
         return best
 
     def mutate(self, number, lower_boundary, upper_boundary, percentage_mutation, probability):
-        percentage_mutation = percentage_mutation/100
+        percentage_mutation = percentage_mutation / 100
         mutation_amount = round(percentage_mutation * number)
         random_num = random.random()
         output = number
@@ -106,8 +107,8 @@ class Search:
                                second_tc.get_uncertainty())
         return output_tc_1, output_tc_2
 
-    def unflatten(self, list):
+    def unflatten(self, representation):
         grouped_list = []
-        for i in range(0, len(list), 2):
-            grouped_list.append(list[i:i + 2])
+        for i in range(0, len(representation), 2):
+            grouped_list.append(representation[i:i + 2])
         return grouped_list

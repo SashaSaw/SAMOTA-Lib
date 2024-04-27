@@ -16,6 +16,7 @@ class AbstractSurrogateModel(ABC):
     def predict(self, test_cases):
         pass
 
+
 class PolynomialRegression(AbstractSurrogateModel):
 
     def __init__(self, degree=2):
@@ -25,7 +26,7 @@ class PolynomialRegression(AbstractSurrogateModel):
         self.y_test = []
 
     def train(self, test_cases):
-        #print("training PR model")
+        # print("training PR model")
         x = []
         y = []
         for test_case in test_cases:
@@ -41,12 +42,12 @@ class PolynomialRegression(AbstractSurrogateModel):
 
     def test(self):
         predict = self.model.predict(self.X_test)
-        print (predict)
+        print(predict)
         mse = mean_squared_error(self.y_test, predict)
         print(f'Mean Squared Error: {mse}')
         return mse
 
     def predict(self, testcase):
-        #print("predicting using PR model")
+        # print("predicting using PR model")
         prediction = self.model.predict([testcase])
         return prediction[0]

@@ -8,6 +8,7 @@ import sys
 import errno
 import logging as log
 
+
 class AbstractFitnessCalculator(ABC):
 
     def __init__(self, simulator_name):
@@ -25,9 +26,11 @@ class AbstractFitnessCalculator(ABC):
 OUTPUT_RESULTS_TO = 'results'
 DEFAULT = object()
 
+
 def get_script_path():
     # Returns the absolute path of the directory containing this script
     return os.path.dirname(os.path.realpath(sys.argv[0]))
+
 
 def setup_logging(log_to, debug):
     def log_exception(extype, value, trace):
@@ -53,6 +56,8 @@ def setup_logging(log_to, debug):
     sys.excepthook = log_exception
 
     log.info(start_msg)
+
+
 def runSim(representation):
     beamng_home = 'C:\\Program Files\\BeamNG.tech.v0.26.2.0'
     beamng_user = 'C:\\cps-tool-competition\\bng-usr'
@@ -115,6 +120,8 @@ def runSim(representation):
         # Ensure the executor is stopped no matter what.
         the_executor.close()
         return output
+
+
 class OneTestGenerator():
     """
         Generates a single test to show how to control the shape of the road by controlling the positio of the
@@ -138,7 +145,7 @@ class OneTestGenerator():
 
         output = 0
         if test_outcome != "INVALID":
-        # Plot the OOB_Percentage: How much the car is outside the road?
+            # Plot the OOB_Percentage: How much the car is outside the road?
             oob_percentage = [state.oob_percentage for state in execution_data]
             log.info("Collected %d states information. Max is %.3f", len(oob_percentage), max(oob_percentage))
             output = max(oob_percentage)
@@ -148,6 +155,7 @@ class OneTestGenerator():
         log.info("description %s", description)
 
         return output
+
 
 class BeamngFitnessCalc(AbstractFitnessCalculator):
 

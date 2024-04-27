@@ -6,28 +6,28 @@ from src.test_case import TestCase
 
 class LocalSearch(Search):
 
-    def __init__(self, map_size, surrogate):
-        super().__init__(map_size, surrogate)
+    def __init__(self, surrogate, max_iter, percentage_local, min_per_cluster):
+        super().__init__(surrogate, max_iter)
+        self.percentage_local = percentage_local
+        self.min_per_cluster = min_per_cluster
 
-    def generate_clusters(self, database, percentage_local, objective, index, min_per_cluster):
+    def generate_clusters(self, database, index):
         """given a database, a percentage for training surrogate models, an objective and a minimum number of test
         cases per cluster, this function generates a set of clusters with the minimum number of test cases in each
         cluster from the top percentage_local% of test cases in the database for the specified objective
         note: percentage local must be a decimal. e.g. 50% = 0.5
         :param database:
-        :param percentage_local:
-        :param uncovered_objectives:
-        :param min_per_cluster:
+        :param index:
         :return: a set of clusters
         """
         print("generating clusters...")
         # create a set of test_cases from the database that have the top percentage_local fitness scores
         total_num_tcs = len(database.get_database())
-        num_of_top_tcs = round(total_num_tcs * percentage_local)
+        num_of_top_tcs = round(total_num_tcs * self.percentage_local)
         top_tcs = self.top_n_test_cases(database.get_database(), num_of_top_tcs, index)
 
         # get the test cases flattened representation and fit them to the clustering algorithm
-        hdb = HDBSCAN(min_cluster_size=min_per_cluster)
+        hdb = HDBSCAN(min_cluster_size=self.min_per_cluster)
         top_tcs_representations = []
         for tc in top_tcs:
             top_tcs_representations.append(tc.flatten_representation())
@@ -40,11 +40,6 @@ class LocalSearch(Search):
             cluster = self.create_cluster(labels, top_tcs, i)
             clusters.append(cluster)
         return clusters
-
-
-        #take database - for each objective select the top (percentage_local- user provided) test cases highest fitness scores for that objective
-        # do clustering sklearn.cluster.hdbscan - in python library (look at SAMOTA package) takes in min number per cluster
-        # hsbdscan needs to take database of test cases as [[x1,x2,x3,...,x6],...] and the function for calc distnace between test cases needs to be defined (or just use euclidean and see
 
     def create_cluster(self, labels, test_cases, label):
         cluster = []
@@ -107,17 +102,17 @@ class LocalSearch(Search):
         return best_predicted_testcase
 
 
-    def local_search(self, database, uncovered_obj, max_iteration, percentage_local, min_per_cluster):
+    def local_search(self, database, uncovered_obj):
         print(" *** starting local search ***")
         test_cases = []
         for i in range(len(uncovered_obj)):
             objective = uncovered_obj[i]
-            clusters = self.generate_clusters(database, percentage_local, objective, i, min_per_cluster)
+            clusters = self.generate_clusters(database, i)
             for cluster in clusters:
                 surrogate_model = self.train_local(cluster)
                 best_predicted_testcase = None
                 counter = 0
-                while counter < max_iteration:
+                while counter < self.max_iter:
                     offspring = self.gen_offspring(cluster)
                     updated_tcs = self.calc_fitness_ls(cluster + offspring, surrogate_model, i)
                     best_predicted_testcase = self.update_best_predicted(best_predicted_testcase, updated_tcs, i)
