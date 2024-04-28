@@ -37,14 +37,12 @@ class SAMOTA:
         all_test_cases = archive + test_cases
         for i in range(len(uncovered_obj)):
             highest_fitness = 0
-            uncovered_obj[i] = False
             for test_case in all_test_cases:
-                if test_case is not None:
-                    fitness = test_case.get_fitness_score_sim()[i]
-                    if fitness > error_thresholds[i] and fitness > highest_fitness:
-                        uncovered_obj[i] = True
-                        highest_fitness = fitness
-                        output_archive[i] = test_case
+                fitness = test_case.get_fitness_score_sim()[i]
+                if test_case is not None and fitness > error_thresholds[i] and fitness > highest_fitness:
+                    uncovered_obj[i] = True
+                    highest_fitness = fitness
+                    output_archive[i] = test_case
         return output_archive, uncovered_obj
 
     def samota(self, num_of_runs, pop_size, error_thresholds):

@@ -95,24 +95,25 @@ class GlobalSearch(Search):
             if uncovered_objectives[i]:
                 updated_uncovered_objectives[i] = True
                 highest_fitness = 0
-                for test_case in test_cases:
-                    fitness_predicted = test_case.get_fitness_score_predicted()[i]
-                    if fitness_predicted > highest_fitness:
-                        highest_fitness = fitness_predicted
-                        updated_best_tcs[i] = test_case
+                updated_best_tcs[i], highest_fitness = self.update_best_tc(test_cases, i, highest_fitness)
             # if objective not satisfied yet then find best test case for objective
             # if best test case fitness score is larger than threshold then set uncovered objective to satisfied
             elif not uncovered_objectives[i]:
                 highest_fitness = -1
-                for test_case in test_cases:
-                    fitness_predicted = test_case.get_fitness_score_predicted()[i]
-                    if fitness_predicted > highest_fitness:
-                        highest_fitness = fitness_predicted
-                        updated_best_tcs[i] = test_case
+                updated_best_tcs[i], highest_fitness = self.update_best_tc(test_cases, i, highest_fitness)
                 if highest_fitness > error_thresholds[i]:
                     updated_uncovered_objectives[i] = True
 
         return updated_best_tcs, updated_uncovered_objectives
+
+    def update_best_tc(self, test_cases, index, highest_fitness):
+        best_tc = test_cases[0]
+        for test_case in test_cases:
+            fitness_predicted = test_case.get_fitness_score_predicted()[index]
+            if fitness_predicted > highest_fitness:
+                highest_fitness = fitness_predicted
+                best_tc = test_case
+        return best_tc, highest_fitness
 
     def global_search(self, database, uncovered_obj, pop_size, error_thresholds):
         print(" *** starting global search ***")

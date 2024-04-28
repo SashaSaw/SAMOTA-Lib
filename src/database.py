@@ -44,7 +44,6 @@ class DatabaseManager:
             # Converts each line of file into a Test Case and then appends it to the database
             for line in lines:
                 attributes = line.split("/")
-                print (attributes)
                 rep = attributes[0]
                 representation = self.read_rep(rep)
 

@@ -96,9 +96,8 @@ class LocalSearch(Search):
         best_fit_score = 0
         all_test_cases = [best_predicted_testcase] + test_cases
         for test_case in all_test_cases:
-            if test_case is not None:
-                if test_case.get_fitness_score_predicted()[index] > best_fit_score:
-                    best_predicted_testcase = test_case
+            if test_case is not None and test_case.get_fitness_score_predicted()[index] > best_fit_score:
+                best_predicted_testcase = test_case
         return best_predicted_testcase
 
 

@@ -22,8 +22,6 @@ class PolynomialRegression(AbstractSurrogateModel):
     def __init__(self, degree=2):
         self.degree = degree
         self.model = LinearRegression()
-        self.X_test = []
-        self.y_test = []
 
     def train(self, test_cases):
         # print("training PR model")
@@ -35,15 +33,15 @@ class PolynomialRegression(AbstractSurrogateModel):
             fitness_score_sim = test_case.get_fitness_score_sim()[0]
             y.append(fitness_score_sim)
         X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
-        self.X_test = X_test
-        self.y_test = y_test
+        self.x = X_test
+        self.x = y_test
         self.model = make_pipeline(PolynomialFeatures(self.degree), LinearRegression())
         self.model.fit(X_train, y_train)
 
     def test(self):
-        predict = self.model.predict(self.X_test)
+        predict = self.model.predict(self.x)
         print(predict)
-        mse = mean_squared_error(self.y_test, predict)
+        mse = mean_squared_error(self.y, predict)
         print(f'Mean Squared Error: {mse}')
         return mse
 
