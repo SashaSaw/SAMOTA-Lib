@@ -4,10 +4,9 @@ from src.test_case import TestCase
 
 class GlobalSearch(Search):
 
-    def __init__(self, surrogate, max_iter, lower_boundaries, upper_boundaries):
+    def __init__(self, surrogate, max_iter, create_tc):
         super().__init__(surrogate, max_iter)
-        self.lower_boundaries = lower_boundaries
-        self.upper_boundaries = upper_boundaries
+        self.create_tc = create_tc
 
 
     def initial_population(self, population_size):
@@ -18,11 +17,7 @@ class GlobalSearch(Search):
         print("creating initial population...")
         population = []
         for i in range(population_size):
-            road_points = []
-            for index in range(0, 3):
-                road_points.append([randint(self.lower_boundaries[index], self.upper_boundaries[index]),
-                                    randint(self.lower_boundaries[index], self.upper_boundaries[index])])
-            test_case = TestCase(road_points, [], [], [])
+            test_case = self.create_tc()
             population.append(test_case)
         return population
 

@@ -69,7 +69,7 @@ def runSim(representation):
     time_budget = 100
     map_size = 200
     oob_tolerance = 0.95
-    speed_limit = 60
+    speed_limit = 25
     output = 0
     # Setup logging
     setup_logging(log_to, debug)

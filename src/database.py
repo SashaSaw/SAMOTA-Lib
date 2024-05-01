@@ -88,13 +88,17 @@ class DatabaseManager:
         """
         with open(filename+".txt", "w") as file:
             # Write content to the file
-            for testcase in self.database:
-                representation = testcase.get_representation()
-                fitness_score_sim = testcase.get_fitness_score_sim()
-                fitness_score_predicted = testcase.get_fitness_score_predicted()
-                uncertainty = testcase.get_uncertainty()
-                string = str(representation) + "/" +\
-                         str(fitness_score_sim) + "/" +\
-                         str(fitness_score_predicted) + "/" + \
-                         str(uncertainty)
-                file.write(string+"\n")
+            for testcase in self.database.copy():
+                if testcase is not None:
+                    representation = testcase.get_representation()
+                    fitness_score_sim = testcase.get_fitness_score_sim()
+                    fitness_score_predicted = testcase.get_fitness_score_predicted()
+                    uncertainty = testcase.get_uncertainty()
+                    string = str(representation) + "/" +\
+                             str(fitness_score_sim) + "/" +\
+                             str(fitness_score_predicted) + "/" + \
+                             str(uncertainty)
+                    file.write(string+"\n")
+                elif testcase is None:
+                    print("none")
+                    file.write("None \n")

@@ -1,3 +1,6 @@
+import time
+
+
 def check_if_obj_covered(uncovered_obj):
     output = True
     # for all objs if one is False then not all objectives are covered
@@ -9,6 +12,14 @@ def check_if_obj_covered(uncovered_obj):
 
 def init_uncovered_obj(num_of_obj):
     return [False] * num_of_obj
+
+
+def check_if_time_up(start_time, time_limit):
+    if time.time() - start_time > time_limit:
+        print("Time is up - concluding samota")
+        return True
+    else:
+        return False
 
 
 class SAMOTA:
@@ -38,31 +49,36 @@ class SAMOTA:
         for i in range(len(uncovered_obj)):
             highest_fitness = 0
             for test_case in all_test_cases:
-                fitness = test_case.get_fitness_score_sim()[i]
-                if test_case is not None and fitness > error_thresholds[i] and fitness > highest_fitness:
-                    uncovered_obj[i] = True
-                    highest_fitness = fitness
-                    output_archive[i] = test_case
+                if test_case is not None:
+                    fitness = test_case.get_fitness_score_sim()[i]
+                    if fitness > error_thresholds[i] and fitness > highest_fitness:
+                        uncovered_obj[i] = True
+                        highest_fitness = fitness
+                        output_archive[i] = test_case
         return output_archive, uncovered_obj
 
-    def samota(self, num_of_runs, pop_size, error_thresholds):
+    def samota(self, num_of_runs, pop_size, error_thresholds, time_limit):
+        start_time = time.time()
         archive = []
         uncovered_obj = init_uncovered_obj(len(error_thresholds))
         test_cases = self.gs.initial_population(pop_size)
         test_cases = self.fit_calc.calculate_fitness_sim(test_cases)
         archive, uncovered_objs = self.update_archive(archive, test_cases, error_thresholds, uncovered_obj)
         self.db.update_database(test_cases)
+        if check_if_time_up(start_time, time_limit):
+            return archive, self.db
         while(num_of_runs > 0):
             global_test_cases = self.gs.global_search(self.db, uncovered_objs, pop_size, error_thresholds)
             global_test_cases = self.fit_calc.calculate_fitness_sim(global_test_cases)
             archive, uncovered_objs = self.update_archive(archive, global_test_cases, error_thresholds, uncovered_obj)
             self.db.update_database(global_test_cases)
+            if check_if_time_up(start_time, time_limit):
+                break
             local_test_cases = self.ls.local_search(self.db, uncovered_objs)
             local_test_cases = self.fit_calc.calculate_fitness_sim(local_test_cases)
             archive, uncovered_objs = self.update_archive(archive, local_test_cases, error_thresholds, uncovered_obj)
             self.db.update_database(global_test_cases)
-            if check_if_obj_covered(uncovered_obj):
-                print("objective covered - stopping algorithm early...")
-                num_of_runs = 0
+            if check_if_obj_covered(uncovered_obj) or check_if_time_up(start_time, time_limit):
+                break
             num_of_runs = num_of_runs - 1
         return archive, self.db
