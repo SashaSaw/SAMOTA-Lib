@@ -5,13 +5,23 @@ from src.local_search import LocalSearch
 from src.database import DatabaseManager
 from src.surrogate_model import PolynomialRegression
 from src.test_case import TestCase
+from src.test_case import create_tc
 from random import randint
 import time
 
 
 def run_random_vs_samota(num_of_runs):
+    samotaresultsdb = DatabaseManager()
+    randomresultsdb = DatabaseManager()
+    fit = BeamngFitnessCalc("beamng")
+    gs = GlobalSearch(PolynomialRegression(3), 2, create_tc)
+    ls = LocalSearch(PolynomialRegression(3), 2, 0.6, 2)
+    db = DatabaseManager()
+    db.load_database("database")
+    samota = SAMOTA(fit, gs, ls, db)
+
     for i in range(0, num_of_runs):
-        archive, database = samota.samota(100, 4, [0.1])
+        archive, database = samota.samota(1000, 4, [0.1], 1800, False)
         samotaresultsdb.update_database(archive)
         print(samotaresultsdb.get_database())
         samotaresultsdb.export_database("samota_results")
@@ -21,6 +31,34 @@ def run_random_vs_samota(num_of_runs):
         randomresultsdb.export_database("random_results")
         print("exporting random results")
     database.export_database("database")
+
+def run_samota_e(num_of_runs): #run samota without a database a number of times
+    samotaeresultsdb = DatabaseManager()
+    db = DatabaseManager()
+    fit = BeamngFitnessCalc("beamng")
+    gs = GlobalSearch(PolynomialRegression(3), 2, create_tc)
+    ls = LocalSearch(PolynomialRegression(3), 2, 0.6, 2)
+    samota = SAMOTA(fit, gs, ls, db)
+
+    for i in range(0, num_of_runs):
+        archive, database = samota.samota(1000, 4, [0.1], 1800, False)
+        samotaeresultsdb.update_database(archive)
+        samotaeresultsdb.export_database("samota_e_results")
+        print("exporting samota-e results")
+
+def run_samota_g(num_of_runs): #run samota without a database a number of times
+    samotagresultsdb = DatabaseManager()
+    db = DatabaseManager()
+    fit = BeamngFitnessCalc("beamng")
+    gs = GlobalSearch(PolynomialRegression(3), 2, create_tc)
+    ls = LocalSearch(PolynomialRegression(3), 2, 0.6, 2)
+    samota = SAMOTA(fit, gs, ls, db)
+
+    for i in range(0, num_of_runs):
+        archive, database = samota.samota(100, 4, [0.1], 1800, False)
+        samotagresultsdb.update_database(archive)
+        samotagresultsdb.export_database("samota_e_results")
+        print("exporting samota-e results")
 
 
 def random(fit):
@@ -38,37 +76,26 @@ def random(fit):
             best_tc = test_case
     return best_tc
 
-def create_tc():
-    representation = []
-    for index in range(0, 3):
-        representation.append([randint(5, 195),
-                               randint(5, 195)])
-    test_case = TestCase(representation, [], [], [])
-    return test_case
-
 
 if __name__ == '__main__':
-
+    run_samota_e(10)
+    run_random_vs_samota(4)
     # samota = SAMOTA()
-    fit = BeamngFitnessCalc("beamng")
+    #fit = BeamngFitnessCalc("beamng")
     # fitness calculator = fit
-    gs = GlobalSearch(PolynomialRegression(3), 2, create_tc)
+    #gs = GlobalSearch(PolynomialRegression(3), 2, create_tc)
     # global search = gs, max iterations for global search = 2, create_tc function is create_tc
-    ls = LocalSearch(PolynomialRegression(3), 2, 0.1, 2)
+    #ls = LocalSearch(PolynomialRegression(3), 2, 0.6, 2)
     # local search = ls, max iterations for local search = 2, percentage for training surrogate models is 0.6 (60%)
     # minimum number of test cases in cluster = 2
-    db = DatabaseManager()
-    db.load_database("database")
+    #db = DatabaseManager()
+    #db.load_database("database")
     # database = db
-
-    samotaresultsdb = DatabaseManager()
-    randomresultsdb = DatabaseManager()
-
-    samota = SAMOTA(fit, gs, ls, db)
+    #samota = SAMOTA(fit, gs, ls, db)
     # max number of runs = 2, population size = 10, list of error thresholds is [0.1], time limit in seconds = 1000
-    archive, database = samota.samota(2, 4, [0.1], 1000)
-    for tc in archive:
-        print(tc.__str__())
-    database.export_database("database")
+    #archive, database = samota.samota(2, 4, [0.1], 180, False)
+    #for tc in archive:
+    #    print(tc.__str__())
+    #database.export_database("database")
 
 

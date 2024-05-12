@@ -1,12 +1,14 @@
 import time
 
-
-def check_if_obj_covered(uncovered_obj):
+def check_if_obj_covered(uncovered_obj, finish_when_obj_covered):
     output = True
     # for all objs if one is False then not all objectives are covered
     for obj in uncovered_obj:
         if not obj:
             output = False
+
+    if not finish_when_obj_covered:
+        return False
     return output
 
 
@@ -57,7 +59,7 @@ class SAMOTA:
                         output_archive[i] = test_case
         return output_archive, uncovered_obj
 
-    def samota(self, num_of_runs, pop_size, error_thresholds, time_limit):
+    def samota(self, num_of_runs, pop_size, error_thresholds, time_limit, finish_when_obj_covered):
         start_time = time.time()
         archive = []
         uncovered_obj = init_uncovered_obj(len(error_thresholds))
@@ -78,7 +80,7 @@ class SAMOTA:
             local_test_cases = self.fit_calc.calculate_fitness_sim(local_test_cases)
             archive, uncovered_objs = self.update_archive(archive, local_test_cases, error_thresholds, uncovered_obj)
             self.db.update_database(global_test_cases)
-            if check_if_obj_covered(uncovered_obj) or check_if_time_up(start_time, time_limit):
-                break
+            if check_if_obj_covered(uncovered_obj, finish_when_obj_covered) or check_if_time_up(start_time, time_limit):
+                num_of_runs = 0
             num_of_runs = num_of_runs - 1
         return archive, self.db

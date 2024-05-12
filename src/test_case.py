@@ -1,3 +1,11 @@
+from random import randint
+def create_tc():
+    representation = []
+    for index in range(0, 3):
+        representation.append([randint(5, 195),
+                               randint(5, 195)])
+    test_case = TestCase(representation, [], [], [])
+    return test_case
 
 class TestCase():
 

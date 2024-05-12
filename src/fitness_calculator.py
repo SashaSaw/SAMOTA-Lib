@@ -25,8 +25,6 @@ class AbstractFitnessCalculator(ABC):
 
 OUTPUT_RESULTS_TO = 'results'
 DEFAULT = object()
-
-
 def get_script_path():
     # Returns the absolute path of the directory containing this script
     return os.path.dirname(os.path.realpath(sys.argv[0]))
