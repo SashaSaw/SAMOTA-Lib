@@ -26,15 +26,16 @@ In my personal experience I used my Ryzen 5 with integrated graphics, 16GB RAM, 
 
 ## Install
 
+First to clone the repo run: git clone 
 (how to install the required packages/libs)
 
 ## How to Run
 
-a short desrcription on how to run (example) 
+a short desrcription on how to run (example photographs of what should be seen) 
 
 ## How to Test
 
-how to run the existing unit test cases
+To run the existing unit test cases you should be able to simply run the command 'python test.py' in the terminal.
 
 ## Authors
 
