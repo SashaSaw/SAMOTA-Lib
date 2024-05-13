@@ -9,10 +9,15 @@ This repositary contains the implementation and license to use SAMOTA-lib.
 - Hardware recommendations:
 
   OS: Windows 10 64-Bit
+  
   CPU: AMD Ryzen 7 1700 3.0Ghz / Intel Core i7-6700 3.4Ghz (or better)
+  
   RAM: 32 GB RAM
+  
   GPU: AMD R9 290 / Nvidia GeForce GTX 970
+  
   DirectX: Version 11
+  
   Storage: 50 GB available space
 
 Note: these are the hardware recommendataions copied from (https://documentation.beamng.com/support/troubleshooting/requirements/#:~:text=Recommended%20Requirements%201%20OS%3A%20Windows%2010%2064-Bit%202,mods%20will%20increase%20required%20storage%20space.%20Gamepad%20recommended.) for the BeamNG application, which also applies for the BeamNG.tech simulator used within this library.
