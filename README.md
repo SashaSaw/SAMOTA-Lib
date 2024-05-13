@@ -1,6 +1,6 @@
 # SAMOTA-lib: An Extensible Framework for Surrogate-Assisted Many Objective Testing Approach for ADS Testing
 
-This project presents SAMOTA-lib, a Python library that implements all the key algorithms and models of SAMOTA, a novel approach designed for Test Suite generation for ADS testing
+This project presents SAMOTA-lib, a Python library that implements all the key algorithms and models of SAMOTA, a novel approach designed for Test Suite generation for ADS testing.
 This repositary contains the implementation and license to use SAMOTA-lib.
 
 ## Requirements
