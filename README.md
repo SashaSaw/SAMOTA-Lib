@@ -6,6 +6,11 @@ This repositary contains the implementation and license to use SAMOTA-lib.
 ## Requirements
 
 - Software requirements:
+
+  Python version: 3.9+
+
+  Packages: see requirements.txt, or simply run the commands in the Install section to install the packages you need
+
 - Hardware recommendations:
 
   OS: Windows 10 64-Bit
@@ -26,12 +31,23 @@ In my personal experience I used my Ryzen 5 with integrated graphics, 16GB RAM, 
 
 ## Install
 
-First to clone the repo run: git clone 
-(how to install the required packages/libs)
+1. First, to clone the repo run: git clone https://github.com/SashaSaw/SAMOTA-Lib.git
+
+2. Then, open the cloned library: cd place/where/you/cloned/the/repository
+
+3. pip install virtualenv (if you don't already have virtualenv installed)
+
+4. virtualenv <name of env> (to create your new environment)
+
+5. source <name of env>/bin/activate (to enter the environement)
+
+6. pip install -r requirements.txt
+
+That should be it. You're ready to use the library!
 
 ## How to Run
 
-a short desrcription on how to run (example photographs of what should be seen) 
+To run the an example implementation of the library simpy run the command 'python main.py' in the terminal.
 
 ## How to Test
 
