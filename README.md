@@ -27,7 +27,7 @@ This repositary contains the implementation and license to use SAMOTA-lib.
 
 Note: these are the hardware recommendataions copied from (https://documentation.beamng.com/support/troubleshooting/requirements/#:~:text=Recommended%20Requirements%201%20OS%3A%20Windows%2010%2064-Bit%202,mods%20will%20increase%20required%20storage%20space.%20Gamepad%20recommended.) for the BeamNG application, which also applies for the BeamNG.tech simulator used within this library.
 
-In my personal experience I used my Ryzen 5 with integrated graphics, 16GB RAM, and Windows 10 and it works fine. Therefore, it should work on the majority of somewhat recent hardware.
+In my personal experience I used my Ryzen 5 with integrated graphics, 16GB RAM, and Windows 10 and it works fine. Therefore, it should work on the majority of modern hardware.
 
 ## Install
 
