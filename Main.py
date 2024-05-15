@@ -77,7 +77,7 @@ def random(fit):
 
 
 if __name__ == '__main__':
-    samota = SAMOTA()
+    #samota = SAMOTA()
     fit = BeamngFitnessCalc("beamng")
     # fitness calculator = fit
     gs = GlobalSearch(PolynomialRegression(3), 2, create_tc)
